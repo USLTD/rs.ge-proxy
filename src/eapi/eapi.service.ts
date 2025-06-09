@@ -1,10 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { HttpService } from "@nestjs/axios";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
+import { instanceToPlain, plainToInstance } from "class-transformer";
 import { catchError, firstValueFrom } from "rxjs";
 import type { AxiosError } from "axios";
-import type { EmptyObject } from "type-fest";
-import type { EServicesAPI } from "./types";
+import { EServicesAPIResponse } from "$/dto/eapi/$response";
+import {
+    UsersAuthenticateRequestDto,
+    UsersAuthenticateResponseDto,
+} from "$/dto/eapi/users/authenticate";
+import {
+    UsersAuthenticatePinRequestDto,
+    UsersAuthenticatePinResponseDto,
+} from "$/dto/eapi/users/authenticate-pin";
+import { UsersSignOutResponseDto } from "$/dto/eapi/users/sign-out";
 
 // TODO
 @Injectable()
@@ -15,13 +24,14 @@ export class EServicesAPIService {
         private readonly httpService: HttpService,
     ) {}
 
-    public async usersAuthenticate(body: EServicesAPI.Users.Authenticate.RequestBody) {
+    public async usersAuthenticate(body: UsersAuthenticateRequestDto) {
+        const payload = instanceToPlain(body);
+
         const { data } = await firstValueFrom(
             this.httpService
-                .post<EServicesAPI.Users.Authenticate.Response>(
-                    "/Users/Authenticate",
-                    body,
-                )
+                .post<
+                    EServicesAPIResponse<UsersAuthenticateResponseDto>
+                >("/Users/Authenticate", payload)
                 .pipe(
                     catchError((err: AxiosError) => {
                         this.logger.error(err.response?.data);
@@ -30,18 +40,20 @@ export class EServicesAPIService {
                 ),
         );
 
-        return data;
+        return plainToInstance(
+            EServicesAPIResponse<UsersAuthenticateResponseDto>,
+            data,
+        );
     }
 
-    public async usersAuthenticatePin(
-        body: EServicesAPI.Users.AuthenticatePin.RequestBody,
-    ) {
+    public async usersAuthenticatePin(body: UsersAuthenticatePinRequestDto) {
+        const payload = instanceToPlain(body);
+
         const { data } = await firstValueFrom(
             this.httpService
-                .post<EServicesAPI.Users.AuthenticatePin.Response>(
-                    "/Users/AuthenticatePin",
-                    body,
-                )
+                .post<
+                    EServicesAPIResponse<UsersAuthenticatePinResponseDto>
+                >("/Users/AuthenticatePin", payload)
                 .pipe(
                     catchError((err: AxiosError) => {
                         this.logger.error(err.response?.data);
@@ -50,13 +62,16 @@ export class EServicesAPIService {
                 ),
         );
 
-        return data;
+        return plainToInstance(
+            EServicesAPIResponse<UsersAuthenticatePinResponseDto>,
+            data,
+        );
     }
 
     public async usersSignOut(token: string) {
-        await firstValueFrom(
+        const { data } = await firstValueFrom(
             this.httpService
-                .post<EServicesAPI.Response<EmptyObject>>(
+                .post<EServicesAPIResponse<UsersSignOutResponseDto>>(
                     "/Users/SignOut",
                     {},
                     {
@@ -72,5 +87,15 @@ export class EServicesAPIService {
                     }),
                 ),
         );
+
+        return plainToInstance(
+            EServicesAPIResponse<UsersSignOutResponseDto>,
+            data,
+        );
+    }
+
+    // TODO
+    public async orgGetVatPayerStatus(token: string) {
+        return;
     }
 }

@@ -1,28 +1,22 @@
 import { Controller, Get } from "@nestjs/common";
 import {
     HealthCheckService,
-    HttpHealthIndicator,
+    // HttpHealthIndicator,
     HealthCheck,
 } from "@nestjs/terminus";
+import { EServicesAPIHealthIndicator } from "./eapi.health";
 
 @Controller("health")
 export class HealthController {
     constructor(
         private health: HealthCheckService,
-        private http: HttpHealthIndicator,
+        // private http: HttpHealthIndicator,
+        private eapiHealthIndicator: EServicesAPIHealthIndicator,
     ) {}
 
     @Get()
     @HealthCheck()
     public check() {
-        return this.health.check([
-            () =>
-                this.http.responseCheck(
-                    "eapi",
-                    "https://eapi.rs.ge",
-                    (response) =>
-                        response.status === 403 || response.status === 200,
-                ),
-        ]);
+        return this.health.check([() => this.eapiHealthIndicator.isHealthy()]);
     }
 }

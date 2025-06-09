@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { Exclude, Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
-import { EServicesAPIResponseStatus } from "./EServicesAPIResponseStatus";
+import { EServicesAPIResponseStatus } from "./response.status.dto";
 
 /**
  * Data Transfer Object (DTO) representing a generic response from the E-Services API.

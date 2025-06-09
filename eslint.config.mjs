@@ -6,7 +6,13 @@ import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default tseslint.config(
     {
-        ignores: ["eslint.config.mjs"],
+        ignores: [
+            "eslint.config.mjs",
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "**/test/**",
+            "**/tests/**",
+        ],
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
@@ -29,6 +35,7 @@ export default tseslint.config(
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-floating-promises": "warn",
             "@typescript-eslint/no-unsafe-argument": "warn",
+            "@typescript-eslint/no-unused-vars": "warn",
         },
     },
 );

@@ -6,6 +6,7 @@ declare const module: {
 };
 
 import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { Logger } from "nestjs-pino";
 import { setupGracefulShutdown } from "nestjs-graceful-shutdown";
@@ -16,6 +17,7 @@ async function bootstrap() {
 
     setupGracefulShutdown({ app });
 
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useLogger(app.get(Logger));
 
     const config = new DocumentBuilder()

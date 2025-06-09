@@ -1,8 +1,16 @@
-import { Controller, Post } from "@nestjs/common";
-import { TypedBody, TypedHeaders } from "@nestia/core";
+import { Controller, Post, Body, Headers } from "@nestjs/common";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { EServicesAPIService } from "./eapi.service";
-import type { EServicesAPI } from "./types";
+import { EServicesAPIResponse } from "$/dto/eapi/$response";
+import {
+    UsersAuthenticateRequestDto,
+    UsersAuthenticateResponseDto,
+} from "$/dto/eapi/users/authenticate";
+import {
+    UsersAuthenticatePinRequestDto,
+    UsersAuthenticatePinResponseDto,
+} from "$/dto/eapi/users/authenticate-pin";
+import { UsersSignOutResponseDto } from "$/dto/eapi/users/sign-out";
 
 // TODO
 @Controller("eapi")
@@ -15,15 +23,16 @@ export class EServicesAPIController {
 
     @Post("Users/Authenticate")
     public async usersAuthenticate(
-        @TypedBody()
-        body: EServicesAPI.Users.Authenticate.RequestBody,
+        @Body()
+        body: UsersAuthenticateRequestDto,
     ) {
-        const response = await this.eServicesAPIService.usersAuthenticate(body);
+        const response: EServicesAPIResponse<UsersAuthenticateResponseDto> =
+            await this.eServicesAPIService.usersAuthenticate(body);
 
         if ("PIN_TOKEN" in response.DATA) {
-            this.logger.info(response, "Detected Two-Factor Authentication");
+            this.logger.debug(response, "Detected Two-Factor Authentication");
         } else {
-            this.logger.info(response, "User authenticated successfully");
+            this.logger.debug(response, "User authenticated successfully");
         }
 
         return response;
@@ -31,19 +40,24 @@ export class EServicesAPIController {
 
     @Post("Users/AuthenticatePin")
     public async usersAuthenticatePin(
-        @TypedBody()
-        body: EServicesAPI.Users.AuthenticatePin.RequestBody,
+        @Body()
+        body: UsersAuthenticatePinRequestDto,
     ) {
-        const response = await this.eServicesAPIService.usersAuthenticatePin(body);
-        this.logger.info(response, "User authenticated with PIN successfully");
+        const response: EServicesAPIResponse<UsersAuthenticatePinResponseDto> =
+            await this.eServicesAPIService.usersAuthenticatePin(body);
+        this.logger.debug(response, "User authenticated with PIN successfully");
         return response;
     }
 
     @Post("Users/SignOut")
     public async usersSignOut(
-        @TypedHeaders() headers: { Authorization: `Bearer ${string}` },
+        @Headers() headers: { Authorization: `Bearer ${string}` },
     ) {
-        await this.eServicesAPIService.usersSignOut(headers.Authorization.substring(7));
-        this.logger.info({}, "User signed out successfully");
+        const response: EServicesAPIResponse<UsersSignOutResponseDto> =
+            await this.eServicesAPIService.usersSignOut(
+                headers.Authorization.substring(7),
+            );
+        this.logger.debug(response, "User signed out successfully");
+        return response;
     }
 }

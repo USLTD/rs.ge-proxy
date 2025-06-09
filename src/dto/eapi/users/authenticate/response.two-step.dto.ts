@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
-import { UsersAuthenticateResponseOneStepDto } from "./response-one-step.dto";
+import { UsersAuthenticateResponseOneStepDto } from "./response.one-step.dto";
 import { IsNotEmpty, IsString } from "class-validator";
 
 /**

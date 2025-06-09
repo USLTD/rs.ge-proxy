@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
-import { EServicesAPIResponse } from "./EServicesAPIResponse";
+import { EServicesAPIResponse } from "./response.dto";
 import { IsEmpty } from "class-validator";
 
 /**
