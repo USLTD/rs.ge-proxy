@@ -6,31 +6,36 @@ import { IsNotEmpty, IsOptional, IsString } from "class-validator";
  */
 export class UsersAuthenticateRequestDto {
     /**
-     * Username or personal ID of the user.
-     */
-    @ApiProperty({ type: "string", description: "Username or personal ID" })
-    @IsString({ message: "USERNAME must be a string" })
-    @IsNotEmpty({ message: "USERNAME must be a non-empty string" })
-    USERNAME: string;
-
-    /**
-     * Password of the user.
-     */
-    @ApiProperty({ type: "string", description: "Password" })
-    @IsString({ message: "PASSWORD must be a string" })
-    @IsNotEmpty({ message: "PASSWORD must be a non-empty string" })
-    PASSWORD: string;
-
-    /**
-     * Device code for two-step authentication, if applicable.
+     * Name or personal ID of the user
      */
     @ApiProperty({
         type: "string",
-        description: "Device code for two-step authentication",
-        nullable: true,
+        description: "Name or personal ID of the user",
+        required: true,
+    })
+    @IsString({ message: "USERNAME must be a string" })
+    @IsNotEmpty({ message: "USERNAME must not be empty" })
+    USERNAME: string;
+
+    /**
+     * Password of the user
+     */
+    @ApiProperty({ type: "string", description: "Password", required: true })
+    @IsString({ message: "PASSWORD must be a string" })
+    @IsNotEmpty({ message: "PASSWORD must not be empty" })
+    PASSWORD: string;
+
+    /**
+     * In the case of two-step authentication, saved device code GUID
+     */
+    @ApiProperty({
+        type: "string",
+        description:
+            "In the case of two-step authentication, saved device code GUID.",
+        required: false,
     })
     @IsOptional()
-    @IsString({ message: "DEVICE_CODE must be a string or null" })
-    @IsNotEmpty({ message: "DEVICE_CODE must be a non-empty string or null" })
-    DEVICE_CODE: string | null;
+    @IsString({ message: "DEVICE_CODE must be a string" })
+    @IsNotEmpty({ message: "DEVICE_CODE must not be empty" })
+    DEVICE_CODE?: string | undefined;
 }

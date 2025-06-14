@@ -13,6 +13,7 @@ export class OrgGetVatPayerStatusRequestDto {
     @ApiProperty({
         type: "string",
         description: "Tax Identification Number (TIN)",
+        required: true,
     })
     @IsTin({
         message:
@@ -23,7 +24,7 @@ export class OrgGetVatPayerStatusRequestDto {
     /**
      * VAT date
      */
-    @ApiProperty({ type: Date, description: "VAT date" })
+    @ApiProperty({ type: Date, description: "VAT date", required: true })
     @IsDate({ message: "VatDate must be a valid date" })
     @ToEServicesAPIDate()
     VatDate: Date;

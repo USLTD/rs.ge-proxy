@@ -1,4 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsNumber, IsString, IsEnum } from "class-validator";
+import { SELLER_ACTION } from "$/dto/eapi/invoice/seller-action.enum";
+import { BUYER_ACTION } from "$/dto/eapi/invoice/buyer-action.enum";
 
 export class InvoiceGetActionsResponseDto {
     /**
@@ -8,6 +11,7 @@ export class InvoiceGetActionsResponseDto {
         type: "number",
         description: "Status ID",
     })
+    @IsNumber({}, { message: "ID must be a number" })
     ID: number;
     /**
      * Status name
@@ -16,21 +20,32 @@ export class InvoiceGetActionsResponseDto {
         type: "string",
         description: "Status name",
     })
+    @IsString({ message: "NAME must be a string" })
     NAME: string;
     /**
      * Action by seller
      */
     @ApiProperty({
-        type: "number",
+        type: () => SELLER_ACTION,
+        enum: SELLER_ACTION,
+        enumName: "SELLER_ACTION",
         description: "Action by seller",
     })
-    SELLER_ACTION: number;
+    @IsEnum(SELLER_ACTION, {
+        message: "SELLER_ACTION must be a valid enum value",
+    })
+    SELLER_ACTION: SELLER_ACTION;
     /**
      * Action by buyer
      */
     @ApiProperty({
-        type: "number",
+        type: () => BUYER_ACTION,
+        enum: BUYER_ACTION,
+        enumName: "BUYER_ACTION",
         description: "Action by buyer",
     })
-    BUYER_ACTION: number;
+    @IsEnum(BUYER_ACTION, {
+        message: "BUYER_ACTION must be a valid enum value",
+    })
+    BUYER_ACTION: BUYER_ACTION;
 }

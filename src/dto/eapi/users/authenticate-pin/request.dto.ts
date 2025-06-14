@@ -8,17 +8,24 @@ export class UsersAuthenticatePinRequestDto {
     /**
      * Temporary PIN token used for authentication.
      */
-    @ApiProperty({ type: "string", description: "Temporary PIN token" })
+    @ApiProperty({
+        type: "string",
+        description: "Temporary PIN token",
+        required: true,
+    })
     @IsString({ message: "PIN_TOKEN must be a string" })
-    @IsNotEmpty({ message: "PIN_TOKEN must be a non-empty string" })
+    @IsNotEmpty({ message: "PIN_TOKEN must not be empty" })
     PIN_TOKEN: string;
 
     /**
      * Four-digit PIN code used for authentication.
      */
-    @ApiProperty({ type: "string", description: "Four-digit PIN code" })
+    @ApiProperty({
+        type: "string",
+        description: "Four-digit PIN code",
+        required: true,
+    })
     @IsString({ message: "PIN must be a string" })
-    @IsNotEmpty({ message: "PIN must be a non-empty string" })
     PIN: string;
 
     /**
@@ -28,12 +35,11 @@ export class UsersAuthenticatePinRequestDto {
     @ApiProperty({
         type: "string",
         description: "Device code for two-step authentication",
-        nullable: true,
+        required: false,
     })
     @IsOptional()
     @IsString({ message: "DEVICE_CODE must be a string" })
-    @IsNotEmpty({ message: "DEVICE_CODE must be a non-empty string" })
-    DEVICE_CODE: string | null;
+    DEVICE_CODE?: string | undefined;
 
     /**
      * Address from which the user is logging in, such as an IP address.
@@ -42,12 +48,11 @@ export class UsersAuthenticatePinRequestDto {
     @ApiProperty({
         type: "string",
         description: "Login address",
-        nullable: true,
+        required: false,
     })
     @IsOptional()
     @IsString({ message: "ADDRESS must be a string" })
-    @IsNotEmpty({ message: "ADDRESS must be a non-empty string" })
-    ADDRESS: string | null;
+    ADDRESS?: string | undefined;
 
     /**
      * Browser used for login, such as Chrome, Firefox, etc.
@@ -56,12 +61,11 @@ export class UsersAuthenticatePinRequestDto {
     @ApiProperty({
         type: "string",
         description: "Browser used for login",
-        nullable: true,
+        required: false,
     })
     @IsOptional()
     @IsString({ message: "BROWSER must be a string" })
-    @IsNotEmpty({ message: "BROWSER must be a non-empty string" })
-    BROWSER: string | null;
+    BROWSER?: string | undefined;
 
     /**
      * Operating system used for login, such as Windows, macOS, Linux, etc.
@@ -70,10 +74,9 @@ export class UsersAuthenticatePinRequestDto {
     @ApiProperty({
         type: "string",
         description: "Operating system used for login",
-        nullable: true,
+        required: false,
     })
     @IsOptional()
     @IsString({ message: "OPER_SYSTEM must be a string" })
-    @IsNotEmpty({ message: "OPER_SYSTEM must be a non-empty string" })
-    OPER_SYSTEM: string | null;
+    OPER_SYSTEM?: string | undefined;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CommonGetTransactionResultRequestDto {
     /**
@@ -8,8 +8,8 @@ export class CommonGetTransactionResultRequestDto {
     @ApiProperty({
         type: "string",
         description: "Transaction ID",
+        required: true,
     })
     @IsString({ message: "TransactionId must be a string" })
-    @IsNotEmpty({ message: "TransactionId must not be an empty string" })
     TransactionId: string;
 }

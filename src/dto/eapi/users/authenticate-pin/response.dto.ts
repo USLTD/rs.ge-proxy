@@ -3,6 +3,8 @@ import { UsersAuthenticateResponseOneStepDto } from "../authenticate";
 
 /**
  * Data Transfer Object (DTO) for the response of user authentication using a PIN.
+ *
+ * @extends UsersAuthenticateResponseOneStepDto
  */
 export class UsersAuthenticatePinResponseDto extends PickType(
     UsersAuthenticateResponseOneStepDto,
